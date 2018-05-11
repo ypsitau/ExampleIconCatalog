@@ -11,22 +11,6 @@ import android.widget.TextView;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
-	public static class ViewHolder extends RecyclerView.ViewHolder {
-		public ImageView imageView_icon;
-		public TextView textView_label;
-		public ViewHolder(View itemView) {
-			super(itemView);
-			imageView_icon = itemView.findViewById(R.id.imageView_icon);
-			textView_label = itemView.findViewById(R.id.textView_label);
-		}
-	}
-
-	@NonNull
-	@Override
-	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-		return new ViewHolder(LayoutInflater.from(parent.getContext()).
-				inflate(R.layout.adapter_item, parent, false));
-	}
 	static public class ItemInfo {
 		final int resId;
 		final String label;
@@ -36,7 +20,9 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 		}
 	}
 
-	private final static ItemInfo[] itemInfos = new ItemInfo[] {
+	private ItemInfo[] itemInfos;
+
+	private final static ItemInfo[] itemInfos_icon = new ItemInfo[] {
 			new ItemInfo(android.R.drawable.ic_btn_speak_now, "ic_btn_speak_now"),
 			new ItemInfo(android.R.drawable.ic_delete, "ic_delete"),
 			new ItemInfo(android.R.drawable.ic_dialog_alert, "ic_dialog_alert"),
@@ -111,7 +97,38 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ViewHolder> {
 			new ItemInfo(android.R.drawable.ic_search_category_default, "ic_search_category_default"),
 			new ItemInfo(android.R.drawable.ic_secure, "ic_secure"),
 	};
+	private final static ItemInfo[] itemInfos_icon2 = new ItemInfo[]{
+			new ItemInfo(android.R.drawable.ic_btn_speak_now, "ic_btn_speak_now"),
+			new ItemInfo(android.R.drawable.ic_delete, "ic_delete"),
+	};
+	private final static ItemInfo[] itemInfos_icon3 = new ItemInfo[]{
+			new ItemInfo(android.R.drawable.ic_popup_sync, "ic_popup_sync"),
+			new ItemInfo(android.R.drawable.ic_search_category_default, "ic_search_category_default"),
+			new ItemInfo(android.R.drawable.ic_secure, "ic_secure"),
+	};
+	public static class ViewHolder extends RecyclerView.ViewHolder {
+		public ImageView imageView_icon;
+		public TextView textView_label;
+		public ViewHolder(View itemView) {
+			super(itemView);
+			imageView_icon = itemView.findViewById(R.id.imageView_icon);
+			textView_label = itemView.findViewById(R.id.textView_label);
+		}
+	}
 
+	ItemAdapter(int position) {
+		itemInfos =
+				(position == 0)? itemInfos_icon :
+				(position == 1)? itemInfos_icon2 :
+				(position == 2)? itemInfos_icon3 :
+				itemInfos_icon;
+	}
+	@NonNull
+	@Override
+	public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+		return new ViewHolder(LayoutInflater.from(parent.getContext()).
+				inflate(R.layout.adapter_item, parent, false));
+	}
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 		holder.imageView_icon.setImageResource(itemInfos[position].resId);
